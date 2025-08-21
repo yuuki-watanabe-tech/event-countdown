@@ -83,7 +83,6 @@ onUnmounted(() => clearInterval(timer))
 
       <h1 class="text-5xl font-extrabold dark:text-black mb-4">Event Countdown</h1>
 
-
       <!-- Event Name -->
       <div class="mb-4 text-left">
         <label class="block text-sm font-medium mb-1">Event Name</label>
@@ -112,8 +111,8 @@ onUnmounted(() => clearInterval(timer))
       </div>
 
       <!-- Button -->
-      <button @click="startCountdown"
-        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg w-full font-semibold">
+      <button type="button" @click="startCountdown"
+        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
         Start Countdown
       </button>
 
@@ -123,7 +122,8 @@ onUnmounted(() => clearInterval(timer))
       </p>
 
       <!-- Timer Result -->
-      <div v-if="result" class="mt-8 p-2 rounded-xl text-white relative" :class="eventBackground">
+      <div v-if="result" class="shadow-[0_10px_25px_rgba(0,0,0,0.25)] mt-8 p-2 rounded-xl text-white relative"
+        :class="eventBackground">
         <!-- ✕ ボタン -->
         <button @click="deleteCountdown" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center
          bg-white text-gray-600 font-bold rounded-full
@@ -159,7 +159,7 @@ onUnmounted(() => clearInterval(timer))
     </div>
   </div>
 
-  <footer class="mt-12 py-6 border-t text-center text-sm text-gray-500">
+  <footer class="py-6 border-t text-center text-sm text-gray-500">
     <a href="/about.html" class="mx-3 hover:text-orange-500">About</a>
     <a href="/privacy.html" class="mx-3 hover:text-orange-500">Privacy Policy</a>
   </footer>
