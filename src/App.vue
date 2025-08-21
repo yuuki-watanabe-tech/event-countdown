@@ -3,7 +3,7 @@ import { computed, onUnmounted, ref } from "vue"
 
 const eventName = ref("")
 const targetDate = ref("")
-const eventType = ref("birthday") // 初期値
+const eventType = ref("notChoosing")
 const result = ref(null)
 const errorMessage = ref("")
 let timer = null
@@ -12,15 +12,30 @@ let timer = null
 const eventBackground = computed(() => {
   switch (eventType.value) {
     case "birthday":
-      return "bg-gradient-to-br from-pink-500 to-green-400"
+      return "bg-pink-200"
     case "work":
-      return "bg-gradient-to-br from-gray-600 to-yellow-400"
+      return "bg-yellow-200"
     case "trip":
-      return "bg-gradient-to-br from-blue-500 to-orange-400"
+      return "bg-orange-200"
     case "anniversary":
-      return "bg-gradient-to-br from-red-500 to-cyan-400"
+      return "bg-cyan-200"
     default:
-      return "bg-gradient-to-br from-orange-500 to-indigo-500"
+      return "bg-white-200"
+  }
+})
+
+const eventFontColor = computed(() => {
+  switch (eventType.value) {
+    case "birthday":
+      return "text-pink-500"
+    case "work":
+      return "text-yellow-500"
+    case "trip":
+      return "text-orange-500"
+    case "anniversary":
+      return "text-cyan-500"
+    default:
+      return "text-black"
   }
 })
 
@@ -77,10 +92,11 @@ onUnmounted(() => clearInterval(timer))
 
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700  flex items-center justify-center text-gray-900 px-4 py-8">
+    class="min-h-screen bg-gradient-to-br from-slate-400 to-slate-100  flex items-center justify-center text-gray-900 px-4 py-8"
+    style="background-image: url('/bg-img.png');">
     <div class="bg-white shadow-lg rounded-2xl p-8 max-w-lg w-full text-center">
-      <!-- Title -->
 
+      <!-- Title -->
       <h1 class="text-5xl font-extrabold dark:text-black mb-4">Event Countdown</h1>
 
       <!-- Event Name -->
@@ -131,25 +147,25 @@ onUnmounted(() => clearInterval(timer))
          active:shadow-inner transition"> ✕
         </button>
 
-        <p v-if="result.isFuture" class="text-lg mb-4">
+        <p v-if="result.isFuture" class="text-lg mb-4" :class="eventFontColor">
           {{ eventName || "Event" }} starts in:
         </p>
         <div v-if="result.isFuture" class="flex justify-center space-x-4">
           <div class="text-center">
-            <p class="text-5xl font-extrabold">{{ result.days }}</p>
-            <span class="text-sm uppercase">Days</span>
+            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.days }}</p>
+            <span class="text-sm uppercase" :class="eventFontColor">Days</span>
           </div>
           <div class="text-center">
-            <p class="text-5xl font-extrabold">{{ result.hours }}</p>
-            <span class="text-sm uppercase">Hours</span>
+            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.hours }}</p>
+            <span class="text-sm uppercase" :class="eventFontColor">Hours</span>
           </div>
           <div class="text-center">
-            <p class="text-5xl font-extrabold">{{ result.minutes }}</p>
-            <span class="text-sm uppercase">Minutes</span>
+            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.minutes }}</p>
+            <span class="text-sm uppercase" :class="eventFontColor">Minutes</span>
           </div>
           <div class="text-center">
-            <p class="text-5xl font-extrabold">{{ result.seconds }}</p>
-            <span class="text-sm uppercase">Seconds</span>
+            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.seconds }}</p>
+            <span class="text-sm uppercase" :class="eventFontColor">Seconds</span>
           </div>
         </div>
         <p v-else class="text-2xl font-bold mt-4">
