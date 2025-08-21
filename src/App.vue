@@ -28,11 +28,11 @@ const startCountdown = () => {
   errorMessage.value = ""
 
   if (!eventName.value.trim()) {
-    errorMessage.value = "Please enter an event name."
+    errorMessage.value = "Please enter an Event Name."
     return
   }
   if (!targetDate.value) {
-    errorMessage.value = "Please select a target date and time."
+    errorMessage.value = "Please select a Target Date & Time."
     return
   }
 
@@ -71,7 +71,8 @@ onUnmounted(() => clearInterval(timer))
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 flex items-center justify-center text-gray-900">
+  <div
+    class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700  flex items-center justify-center text-gray-900">
     <div class="bg-white shadow-lg rounded-2xl p-8 max-w-lg w-full text-center">
       <!-- Title -->
 
@@ -151,3 +152,25 @@ onUnmounted(() => clearInterval(timer))
     <a href="/privacy.html" class="mx-3 hover:text-orange-500">Privacy Policy</a>
   </footer>
 </template>
+
+<style scoped>
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-animated {
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+</style>
