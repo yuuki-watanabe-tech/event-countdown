@@ -72,7 +72,7 @@ onUnmounted(() => clearInterval(timer))
 
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700  flex items-center justify-center text-gray-900">
+    class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-700  flex items-center justify-center text-gray-900 px-4 py-8">
     <div class="bg-white shadow-lg rounded-2xl p-8 max-w-lg w-full text-center">
       <!-- Title -->
 
@@ -118,25 +118,25 @@ onUnmounted(() => clearInterval(timer))
       </p>
 
       <!-- Timer Result -->
-      <div v-if="result" class="mt-8 p-6 rounded-xl text-white" :class="eventBackground">
+      <div v-if="result" class="mt-8 p-2 rounded-xl text-white" :class="eventBackground">
         <p v-if="result.isFuture" class="text-lg mb-4">
           {{ eventName || "Event" }} starts in:
         </p>
-        <div v-if="result.isFuture" class="flex justify-center space-x-6">
+        <div v-if="result.isFuture" class="flex justify-center space-x-4">
           <div class="text-center">
-            <p class="text-6xl font-extrabold">{{ result.days }}</p>
+            <p class="text-5xl font-extrabold">{{ result.days }}</p>
             <span class="text-sm uppercase">Days</span>
           </div>
           <div class="text-center">
-            <p class="text-6xl font-extrabold">{{ result.hours }}</p>
+            <p class="text-5xl font-extrabold">{{ result.hours }}</p>
             <span class="text-sm uppercase">Hours</span>
           </div>
           <div class="text-center">
-            <p class="text-6xl font-extrabold">{{ result.minutes }}</p>
+            <p class="text-5xl font-extrabold">{{ result.minutes }}</p>
             <span class="text-sm uppercase">Minutes</span>
           </div>
           <div class="text-center">
-            <p class="text-6xl font-extrabold">{{ result.seconds }}</p>
+            <p class="text-5xl font-extrabold">{{ result.seconds }}</p>
             <span class="text-sm uppercase">Seconds</span>
           </div>
         </div>
