@@ -145,4 +145,9 @@ onUnmounted(() => clearInterval(timer))
       </div>
     </div>
   </div>
+
+  <footer class="mt-12 py-6 border-t text-center text-sm text-gray-500">
+    <a href="/about.html" class="mx-3 hover:text-orange-500">About</a>
+    <a href="/privacy.html" class="mx-3 hover:text-orange-500">Privacy Policy</a>
+  </footer>
 </template>
