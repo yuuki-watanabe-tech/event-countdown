@@ -67,6 +67,11 @@ const startCountdown = () => {
   timer = setInterval(update, 1000)
 }
 
+const deleteCountdown = () => {
+  result.value = null;
+  clearInterval(timer)
+}
+
 onUnmounted(() => clearInterval(timer))
 </script>
 
@@ -118,7 +123,14 @@ onUnmounted(() => clearInterval(timer))
       </p>
 
       <!-- Timer Result -->
-      <div v-if="result" class="mt-8 p-2 rounded-xl text-white" :class="eventBackground">
+      <div v-if="result" class="mt-8 p-2 rounded-xl text-white relative" :class="eventBackground">
+        <!-- ✕ ボタン -->
+        <button @click="deleteCountdown" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center
+         bg-white text-gray-600 font-bold rounded-full
+         shadow-md hover:shadow-lg hover:text-gray-800
+         active:shadow-inner transition"> ✕
+        </button>
+
         <p v-if="result.isFuture" class="text-lg mb-4">
           {{ eventName || "Event" }} starts in:
         </p>
