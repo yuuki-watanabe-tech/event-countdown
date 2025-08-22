@@ -91,7 +91,7 @@ const startCountdown = () => {
 }
 
 const deleteCountdown = () => {
-  result.value = {};
+  result.value = undefined;
   clearInterval(timer)
 }
 
