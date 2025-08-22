@@ -11,7 +11,7 @@ const seconds = ref(0)
 const isFuture = ref(false)
 let timerId: number | undefined = undefined
 
-const emit = defineEmits<{
+defineEmits<{
   delete: [id: number]
 }>();
 

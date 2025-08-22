@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from "vue"
-import CountDownCard from "./components/CountDownCard.vue"
+import CountdownCard from "./components/CountdownCard.vue"
 import type { Countdown } from "./types/countdown"
 
 const eventName = ref("")
@@ -39,7 +39,6 @@ const startCountdown = () => {
 }
 
 const deleteCountdown = (id: number) => {
-  console.log('deleteCountdown. id:' + id)
   countdownList.value = countdownList.value.filter(e => e.id !== id);
 }
 
@@ -122,7 +121,7 @@ onUnmounted(() => clearInterval(timer))
       </p>
 
       <!-- Timer Result -->
-      <CountDownCard v-for="countdown in countdownList" :id="countdown.id" :eventName="countdown.eventName"
+      <CountdownCard v-for="countdown in countdownList" :id="countdown.id" :eventName="countdown.eventName"
         :eventType="countdown.eventType" :targetDate="countdown.targetDate" :isFuture="countdown.isFuture"
         @delete="deleteCountdown" />
     </div>
