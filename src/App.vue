@@ -1,12 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onUnmounted, ref } from "vue"
+
+interface Countdown {
+  isFuture?: boolean
+  days?: number
+  hours?: number
+  minutes?: number
+  seconds?: number
+}
 
 const eventName = ref("")
 const targetDate = ref("")
 const eventType = ref("notChoosing")
-const result = ref(null)
+const result = ref<Countdown>()
 const errorMessage = ref("")
-let timer = null
+let timer: number | undefined = undefined
 
 // イベント種類ごとの背景色
 const eventBackground = computed(() => {
@@ -56,7 +64,7 @@ const startCountdown = () => {
 
   const update = () => {
     const now = new Date()
-    const diff = target - now
+    const diff = target.getTime() - now.getTime()
 
     if (diff <= 0) {
       result.value = { isFuture: false }
@@ -83,8 +91,15 @@ const startCountdown = () => {
 }
 
 const deleteCountdown = () => {
-  result.value = null;
+  result.value = {};
   clearInterval(timer)
+}
+
+function setPreset(days: number) {
+  const now = new Date()
+  now.setDate(now.getDate() + days)
+  // datetime-local 用にフォーマット
+  targetDate.value = now.toISOString().slice(0, 16)
 }
 
 onUnmounted(() => clearInterval(timer))
@@ -98,6 +113,11 @@ onUnmounted(() => clearInterval(timer))
 
       <!-- Title -->
       <h1 class="text-5xl font-extrabold dark:text-black mb-4">Event Countdown</h1>
+      <p class="text-lg text-gray-400 mb-6 text-center max-w-2xl">
+        Create and track countdowns for your important events.
+        Whether it’s a birthday, a trip, or a special milestone,
+        stay excited as the big day approaches.
+      </p>
 
       <!-- Event Name -->
       <div class="mb-4 text-left">
@@ -122,6 +142,18 @@ onUnmounted(() => clearInterval(timer))
       <!-- Target Date -->
       <div class="mb-4 text-left">
         <label class="block text-sm font-medium mb-1">Target Date & Time</label>
+        <!-- プリセットボタン -->
+        <div class="flex gap-2 mt-2 mb-2">
+          <button @click="setPreset(1)" class="bg-gray-200 text-gray-800 px-3 py-1 rounded-md hover:bg-gray-300">
+            +1 day
+          </button>
+          <button @click="setPreset(7)" class="bg-gray-200 text-gray-800 px-3 py-1 rounded-md hover:bg-gray-300">
+            +1 week
+          </button>
+          <button @click="setPreset(14)" class="bg-gray-200 text-gray-800 px-3 py-1 rounded-md hover:bg-gray-300">
+            +2 weeks
+          </button>
+        </div>
         <input type="datetime-local" v-model="targetDate"
           class="border rounded-lg p-2 w-full focus:ring-2 focus:ring-orange-400 focus:outline-none" />
       </div>
