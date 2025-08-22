@@ -1,51 +1,14 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref } from "vue"
-
-interface Countdown {
-  isFuture?: boolean
-  days?: number
-  hours?: number
-  minutes?: number
-  seconds?: number
-}
+import { onUnmounted, ref } from "vue"
+import CountDownCard from "./components/CountDownCard.vue"
+import type { Countdown } from "./types/countdown"
 
 const eventName = ref("")
 const targetDate = ref("")
 const eventType = ref("notChoosing")
-const result = ref<Countdown>()
+const countdownList = ref<Countdown[]>([])
 const errorMessage = ref("")
 let timer: number | undefined = undefined
-
-// イベント種類ごとの背景色
-const eventBackground = computed(() => {
-  switch (eventType.value) {
-    case "birthday":
-      return "bg-pink-200"
-    case "work":
-      return "bg-yellow-200"
-    case "trip":
-      return "bg-orange-200"
-    case "anniversary":
-      return "bg-cyan-200"
-    default:
-      return "bg-white-200"
-  }
-})
-
-const eventFontColor = computed(() => {
-  switch (eventType.value) {
-    case "birthday":
-      return "text-pink-500"
-    case "work":
-      return "text-yellow-500"
-    case "trip":
-      return "text-orange-500"
-    case "anniversary":
-      return "text-cyan-500"
-    default:
-      return "text-black"
-  }
-})
 
 const startCountdown = () => {
   errorMessage.value = ""
@@ -54,45 +17,30 @@ const startCountdown = () => {
     errorMessage.value = "Please enter an Event Name."
     return
   }
+
   if (!targetDate.value) {
     errorMessage.value = "Please select a Target Date & Time."
     return
   }
 
-  clearInterval(timer)
-  const target = new Date(targetDate.value)
-
-  const update = () => {
-    const now = new Date()
-    const diff = target.getTime() - now.getTime()
-
-    if (diff <= 0) {
-      result.value = { isFuture: false }
-      clearInterval(timer)
-      return
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
-    const minutes = Math.floor((diff / (1000 * 60)) % 60)
-    const seconds = Math.floor((diff / 1000) % 60)
-
-    result.value = {
-      isFuture: true,
-      days,
-      hours,
-      minutes,
-      seconds
-    }
+  const diff = new Date(targetDate.value).getTime() - new Date().getTime()
+  if (diff <= 0) {
+    errorMessage.value = "Please enter the future date."
+    return
   }
 
-  update()
-  timer = setInterval(update, 1000)
+  countdownList.value.push({
+    id: generateId(),
+    eventName: eventName.value,
+    eventType: eventType.value,
+    targetDate: targetDate.value,
+    isFuture: false
+  });
 }
 
-const deleteCountdown = () => {
-  result.value = undefined;
-  clearInterval(timer)
+const deleteCountdown = (id: number) => {
+  console.log('deleteCountdown. id:' + id)
+  countdownList.value = countdownList.value.filter(e => e.id !== id);
 }
 
 function setPreset(days: number) {
@@ -100,6 +48,10 @@ function setPreset(days: number) {
   now.setDate(now.getDate() + days)
   // datetime-local 用にフォーマット
   targetDate.value = now.toISOString().slice(0, 16)
+}
+
+function generateId(): number {
+  return Date.now() * 1_000_000 + Math.floor(Math.random() * 1_000_000)
 }
 
 onUnmounted(() => clearInterval(timer))
@@ -170,40 +122,9 @@ onUnmounted(() => clearInterval(timer))
       </p>
 
       <!-- Timer Result -->
-      <div v-if="result" class="shadow-[0_10px_25px_rgba(0,0,0,0.25)] mt-8 p-2 rounded-xl text-white relative"
-        :class="eventBackground">
-        <!-- ✕ ボタン -->
-        <button @click="deleteCountdown" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center
-         bg-white text-gray-600 font-bold rounded-full
-         shadow-md hover:shadow-lg hover:text-gray-800
-         active:shadow-inner transition"> ✕
-        </button>
-
-        <p v-if="result.isFuture" class="text-lg mb-4" :class="eventFontColor">
-          {{ eventName || "Event" }} starts in:
-        </p>
-        <div v-if="result.isFuture" class="flex justify-center space-x-4">
-          <div class="text-center">
-            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.days }}</p>
-            <span class="text-sm uppercase" :class="eventFontColor">Days</span>
-          </div>
-          <div class="text-center">
-            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.hours }}</p>
-            <span class="text-sm uppercase" :class="eventFontColor">Hours</span>
-          </div>
-          <div class="text-center">
-            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.minutes }}</p>
-            <span class="text-sm uppercase" :class="eventFontColor">Minutes</span>
-          </div>
-          <div class="text-center">
-            <p class="text-5xl font-extrabold" :class="eventFontColor">{{ result.seconds }}</p>
-            <span class="text-sm uppercase" :class="eventFontColor">Seconds</span>
-          </div>
-        </div>
-        <p v-else class="text-2xl font-bold mt-4">
-          {{ eventName || "Event" }} has passed!
-        </p>
-      </div>
+      <CountDownCard v-for="countdown in countdownList" :id="countdown.id" :eventName="countdown.eventName"
+        :eventType="countdown.eventType" :targetDate="countdown.targetDate" :isFuture="countdown.isFuture"
+        @delete="deleteCountdown" />
     </div>
   </div>
 
